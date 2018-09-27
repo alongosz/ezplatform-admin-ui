@@ -14,3 +14,7 @@ services:
             $translationDomain: '%ezplatform.field_type.ezrichtext.custom_tags.translation_domain%'
         tags:
             - { name: jms_translation.extractor, alias: 'ez_richtext_custom_tags' }
+
+    EzSystems\EzPlatformAdminUi\Translation\CustomTagsTranslator:
+        arguments:
+            $translationDomain: '%ezplatform.field_type.ezrichtext.custom_tags.translation_domain%'
