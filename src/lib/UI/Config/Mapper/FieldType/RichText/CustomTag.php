@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace EzSystems\EzPlatformAdminUi\UI\Config\Mapper\FieldType\RichText;
 
+use EzSystems\EzPlatformAdminUi\Translation\CustomTagsTranslator;
 use EzSystems\EzPlatformAdminUi\UI\Config\Mapper\FieldType\RichText\CustomTag\AttributeMapper;
 use RuntimeException;
 use Symfony\Component\Asset\Packages;
@@ -22,34 +23,29 @@ class CustomTag
     /** @var array */
     private $customTagsConfiguration;
 
-    /** @var TranslatorInterface */
-    private $translator;
-
     /** @var Packages */
     private $packages;
 
     /** @var AttributeMapper[] */
     private $customTagAttributeMappers;
 
+    /** @var TranslatorInterface */
+    private $customTagsTranslator;
+
     /** @var AttributeMapper[] */
     private $supportedTagAttributeMappersCache;
 
-    /** @var string */
-    private $translationDomain;
-
     public function __construct(
         array $customTagsConfiguration,
-        TranslatorInterface $translator,
-        string $translationDomain,
         Packages $packages,
-        Traversable $customTagAttributeMappers
+        Traversable $customTagAttributeMappers,
+        CustomTagsTranslator $customTagsTranslator
     ) {
         $this->customTagsConfiguration = $customTagsConfiguration;
-        $this->translator = $translator;
-        $this->translationDomain = $translationDomain;
         $this->packages = $packages;
         $this->customTagAttributeMappers = $customTagAttributeMappers;
         $this->supportedTagAttributeMappersCache = [];
+        $this->customTagsTranslator = $customTagsTranslator;
     }
 
     /**
@@ -77,7 +73,7 @@ class CustomTag
                 );
             }
 
-            $config[$tagName]['label'] = "ezrichtext.custom_tags.{$tagName}.label";
+            $config[$tagName]['label'] = $this->customTagsConfiguration;
             $config[$tagName]['description'] = "ezrichtext.custom_tags.{$tagName}.description";
             foreach ($customTagConfiguration['attributes'] as $attributeName => $properties) {
                 $typeMapper = $this->getAttributeTypeMapper(
@@ -93,7 +89,7 @@ class CustomTag
             }
         }
 
-        return $this->translateLabels($config);
+        return $this->customTagsTranslator->addTranslationLabels($config);
     }
 
     /**
@@ -124,45 +120,5 @@ class CustomTag
         throw new RuntimeException(
             "RichText Custom Tag configuration: unsupported attribute type '{$attributeType}' of '{$attributeName}' attribute of '{$tagName}' Custom Tag"
         );
-    }
-
-    /**
-     * Process Custom Tags config and translate labels for UI.
-     *
-     * @param array $config
-     *
-     * @return array processed Custom Tags config with translated labels
-     */
-    private function translateLabels(array $config): array
-    {
-        foreach ($config as $tagName => $tagConfig) {
-            $config[$tagName]['label'] = $this->translator->trans(
-                /** @Ignore */
-                $tagConfig['label'],
-                [],
-                $this->translationDomain
-            );
-            $config[$tagName]['description'] = $this->translator->trans(
-                /** @Ignore */
-                $tagConfig['description'],
-                [],
-                $this->translationDomain
-            );
-
-            if (empty($tagConfig['attributes'])) {
-                continue;
-            }
-
-            foreach ($tagConfig['attributes'] as $attributeName => $attributeConfig) {
-                $config[$tagName]['attributes'][$attributeName]['label'] = $this->translator->trans(
-                    /** @Ignore */
-                    $attributeConfig['label'],
-                    [],
-                    $this->translationDomain
-                );
-            }
-        }
-
-        return $config;
     }
 }

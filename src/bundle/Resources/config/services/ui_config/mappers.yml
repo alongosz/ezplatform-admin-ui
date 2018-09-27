@@ -19,7 +19,6 @@ services:
         autowire: true
         arguments:
             $customTagsConfiguration: '%ezplatform.ezrichtext.custom_tags%'
-            $translationDomain: '%ezplatform.field_type.ezrichtext.custom_tags.translation_domain%'
             $customTagAttributeMappers: !tagged ezplatform.admin_ui.richtext_custom_tag_attribute_mapper
 
     # RichText Custom Styles UI config mapper

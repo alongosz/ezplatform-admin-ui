@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace EzSystems\EzPlatformAdminUi\Translation\Extractor;
 
+use EzSystems\EzPlatformAdminUi\Translation\CustomTagsTranslator;
 use JMS\TranslationBundle\Model\Message;
 use JMS\TranslationBundle\Model\MessageCatalogue;
 use JMS\TranslationBundle\Translation\ExtractorInterface;
@@ -23,10 +24,6 @@ use JMS\TranslationBundle\Translation\ExtractorInterface;
  */
 class CustomTagsExtractor implements ExtractorInterface
 {
-    const TAG_LABEL_KEY_FORMAT = 'ezrichtext.custom_tags.%s.label';
-    const TAG_DESCRIPTION_KEY_FORMAT = 'ezrichtext.custom_tags.%s.description';
-    const TAG_ATTRIBUTE_LABEL_KEY_FORMAT = 'ezrichtext.custom_tags.%s.attributes.%s.label';
-
     /** @var array */
     private $customTagsConfiguration = [];
 
@@ -52,7 +49,7 @@ class CustomTagsExtractor implements ExtractorInterface
                 $this->createTagMessage(
                     $customTagName,
                     'label',
-                    static::TAG_LABEL_KEY_FORMAT,
+                    CustomTagsTranslator::TAG_LABEL_KEY_FORMAT,
                     $this->normalizeDefaultLocaleString($customTagName)
                 )
             );
@@ -60,7 +57,7 @@ class CustomTagsExtractor implements ExtractorInterface
                 $this->createTagMessage(
                     $customTagName,
                     'description',
-                    static::TAG_DESCRIPTION_KEY_FORMAT,
+                    CustomTagsTranslator::TAG_DESCRIPTION_KEY_FORMAT,
                     ''
                 )
             );
@@ -112,7 +109,7 @@ class CustomTagsExtractor implements ExtractorInterface
         string $customTagAttributeName
     ): Message\XliffMessage {
         $id = sprintf(
-            static::TAG_ATTRIBUTE_LABEL_KEY_FORMAT,
+            CustomTagsTranslator::TAG_ATTRIBUTE_LABEL_KEY_FORMAT,
             $customTagName,
             $customTagAttributeName
         );
