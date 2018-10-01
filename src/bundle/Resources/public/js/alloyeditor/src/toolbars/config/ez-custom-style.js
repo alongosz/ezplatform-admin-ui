@@ -4,7 +4,7 @@ export default class EzCustomStyleConfig extends EzConfigBase {
     constructor(config) {
         super(config);
 
-        this.name = 'custom-style';
+        this.name = config.name;
         this.buttons = [
             'ezmoveup',
             'ezmovedown',
@@ -47,11 +47,8 @@ export default class EzCustomStyleConfig extends EzConfigBase {
             nativeEditor.isSelectionEmpty() &&
             path &&
             path.contains(function(el) {
-                return (
-                    el.hasAttribute('data-ezelement') &&
-                    (el.getAttribute('data-ezelement') === 'ezstyle' || el.getAttribute('data-ezelement') === 'ezstyleinline')
-                );
-            })
+                return el.hasAttribute('data-ezname') && el.getAttribute('data-ezname') === this.name;
+            }.bind(this))
         );
     }
 }

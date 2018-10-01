@@ -109,7 +109,7 @@
                 style: {
                     element: customStyleConfig.inline ? 'span' : 'div',
                     attributes: {
-                        'data-ezelement': customStyleConfig.inline ? 'ezstyleinline' : 'ezstyle',
+                        'data-ezelement': customStyleConfig.inline ? 'eztemplateinline' : 'eztemplate',
                         'data-ezname': customStyleName,
                     },
                 },
