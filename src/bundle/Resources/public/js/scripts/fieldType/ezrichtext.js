@@ -219,45 +219,63 @@
                 let next;
                 let removeClass = function() {};
 
-                while (element) {
-                    next = element.nextSibling;
-                    if (!element.getAttribute || !element.getAttribute('data-ezelement')) {
-                        embedNode.removeChild(element);
-                    }
-                    element = next;
+            while (element) {
+                next = element.nextSibling;
+                if (!element.getAttribute || !element.getAttribute('data-ezelement')) {
+                    embedNode.removeChild(element);
                 }
+                element = next;
+            }
 
-                embedNode.classList.forEach(function(cl) {
-                    let prevRemoveClass = removeClass;
+            embedNode.classList.forEach(function(cl) {
+                let prevRemoveClass = removeClass;
 
-                    if (cl.indexOf('is-embed-') === 0) {
-                        removeClass = function() {
-                            embedNode.classList.remove(cl);
-                            prevRemoveClass();
-                        };
-                    }
-                });
-                removeClass();
-            };
-            const xhtmlify = function(data) {
-                const doc = document.implementation.createDocument(xhtmlNamespace, 'html', null);
-                const htmlDoc = document.implementation.createHTMLDocument('');
-                const section = htmlDoc.createElement('section');
-                let body = htmlDoc.createElement('body');
+                if (cl.indexOf('is-embed-') === 0) {
+                    removeClass = function() {
+                        embedNode.classList.remove(cl);
+                        prevRemoveClass();
+                    };
+                }
+            });
+            removeClass();
+        };
+        const clearCustomTag = (customTag) => {
+            const attributesNodes = [...customTag.querySelectorAll('[data-ezelement="ezattributes"]')];
+            const headers = [...customTag.querySelectorAll('.ez-custom-tag__header')];
 
-                section.innerHTML = data;
-                body.appendChild(section);
-                body = doc.importNode(body, true);
-                doc.documentElement.appendChild(body);
+            attributesNodes.forEach((attributesNode) => attributesNode.remove());
+            headers.forEach((header) => header.remove());
+        };
+        const xhtmlify = function(data) {
+            const doc = document.implementation.createDocument(xhtmlNamespace, 'html', null);
+            const htmlDoc = document.implementation.createHTMLDocument('');
+            const section = htmlDoc.createElement('section');
+            let body = htmlDoc.createElement('body');
 
-                return body.innerHTML;
-            };
+            section.innerHTML = data;
+            body.appendChild(section);
+            body = doc.importNode(body, true);
+            doc.documentElement.appendChild(body);
+
+            return body.innerHTML;
+        };
+
+        if (!section.hasChildNodes()) {
+            section.appendChild(document.createElement('p'));
+        }
+
+        alloyEditor.get('nativeEditor').setData(section.innerHTML);
+
+        container.addEventListener('blur', (event) => {
+            const data = alloyEditor.get('nativeEditor').getData();
+            const doc = document.createDocumentFragment();
+            const root = document.createElement('div');
 
             root.innerHTML = data;
             doc.appendChild(root);
 
             [...doc.querySelectorAll('[data-ezelement="ezembed"]')].forEach(emptyEmbed);
-            [...doc.querySelectorAll('[data-ezelement="ezcustomtag"]')].forEach(emptyEmbed);
+            [...doc.querySelectorAll('[data-ezelement="eztemplate"]:not([data-eztype="style"])')].forEach(clearCustomTag);
 
             event.target.closest('.ez-data-source').querySelector('textarea').value = xhtmlify(root.innerHTML).replace(
                 xhtmlNamespace,
