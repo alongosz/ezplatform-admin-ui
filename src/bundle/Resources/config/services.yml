@@ -70,6 +70,8 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    EzSystems\EzPlatformAdminUi\EventListener\UserLanguagePreferenceListener: ~
+
     EzSystems\EzPlatformAdminUi\EventListener\RequestAttributesListener:
         arguments:
             - '%ezpublish.siteaccess.groups%'

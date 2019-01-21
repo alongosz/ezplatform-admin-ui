@@ -7,7 +7,7 @@ services:
     # Kernel
     eZ\Publish\API\Repository\Repository: '@ezpublish.api.repository'
     eZ\Publish\API\Repository\ContentService: '@ezpublish.api.service.content'
-    eZ\Publish\API\Repository\ContentTypeService: '@ezpublish.api.service.content_type'
+    eZ\Publish\API\Repository\ContentTypeService: '@ezpublish.siteaccessaware.service.content_type'
     eZ\Publish\API\Repository\LanguageService: '@ezpublish.api.service.language'
     eZ\Publish\API\Repository\LocationService: '@ezpublish.api.service.location'
     eZ\Publish\API\Repository\ObjectStateService: '@ezpublish.api.service.object_state'

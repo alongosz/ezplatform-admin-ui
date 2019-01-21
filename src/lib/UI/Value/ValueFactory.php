@@ -250,7 +250,8 @@ class ValueFactory
         return new UIValue\Location\Bookmark(
             $location,
             [
-                'contentType' => $location->getContent()->getContentType(),
+                //'contentType' => $location->getContent()->getContentType(),
+                'contentType' => $this->contentTypeService->loadContentType($location->contentInfo->contentTypeId),
                 'pathLocations' => $this->pathService->loadPathLocations($location),
                 'userCanEdit' => $this->permissionResolver->canUser('content', 'edit', $location->contentInfo),
             ]
