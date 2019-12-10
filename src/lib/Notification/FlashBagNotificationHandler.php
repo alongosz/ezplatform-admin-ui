@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class FlashBagNotificationHandler implements NotificationHandlerInterface
 {
-    const TYPE_INFO = 'info';
+    const TYPE_INFO = 'abc';
     const TYPE_SUCCESS = 'success';
     const TYPE_WARNING = 'warning';
     const TYPE_ERROR = 'danger';
